@@ -1,0 +1,260 @@
+create database Tutorial
+use  Tutorial
+
+
+create table Payment
+(
+   PaymentId int primary key identity,
+   Anount money ,
+   ParId int
+)
+
+
+create table Complain
+(
+   ComplainId int primary key identity,
+   ComplainText varchar(200) , 
+   ParId int
+)
+
+
+create table Profile
+(
+   ProfileId int primary key identity,
+   ProfileName varchar(30) unique not null,
+   Bio varchar(200) ,
+   ProfilePicture image 
+)
+
+
+create table Student
+(
+   StudentId int primary key identity,
+   Grade int,
+   Name varchar(30) ,
+   Username varchar(30) unique,
+   Password nvarchar(20),
+   Active BIT ,
+   ParId int ,
+   ProfId int ,
+   AddrId int
+)
+
+
+create table Parent
+(
+   ParentId int primary key identity,
+   Name varchar(30) ,
+   PhoneNumber varchar(13) ,
+   EmailAddress nvarchar(255) ,
+   DateRegistered date ,
+   Username varchar(30) unique,
+   Password nvarchar(20),
+   Active BIT ,
+   ProfId int ,
+   AddrId int
+)
+
+
+create table Subject
+(
+   SubjectId int primary key identity,
+   Title varchar(30) ,
+   Grade int,
+   ParId int,
+   TutId int
+)
+
+
+create table Schedule
+(
+   ScheduleId int primary key identity,
+   Date date,
+   Time datetime ,
+   ParId int ,
+   TutId int
+)
+
+
+create table Notification
+(
+   NotificationId int primary key identity,
+   Notification nvarchar(300) ,
+   Date date ,
+   ParId int ,
+   StuId int ,
+   TutId int
+)
+
+
+create table Offer
+(
+   OfferId int primary key identity,
+   Date date ,
+   ParId int ,
+   TutId int
+)
+
+
+create table Tutor
+(
+   TutorId int primary key identity,
+   Salary money,
+   Name varchar(30) ,
+   Cv varbinary ,
+   Username varchar(30) unique,
+   Active BIT,
+   Password nvarchar(20),
+   ProfId int ,
+   AddrId int
+)
+
+
+create table Performance
+(
+   PerformanceId int primary key identity,
+   Performance varchar(200) ,
+   Date date ,
+   StuId int ,
+   TutId int   
+)
+
+
+create table Address
+(
+   AddressId int primary key identity,
+   Street nvarchar(70) ,
+   City varchar(20) ,
+   Country varchar(20) ,
+   KifleKetema varchar(20),
+   State varchar(20) 
+)
+
+
+create table Rate
+(
+   RateId int primary key identity,
+   Rate int,
+   Comment nvarchar(150) ,
+   ParId int ,
+   TutId int
+)
+
+
+
+
+
+-- Foreign keys related to Parent
+
+alter table Payment
+add constraint [fk_paypar]
+foreign key (ParId) references  Parent (ParentId)
+
+
+alter table Student
+add constraint [fk_stupar]
+foreign key (ParId) references  Parent (ParentId)
+
+
+alter table Complain
+add constraint [fk_compar]
+foreign key (ParId) references  Parent (ParentId)
+
+
+alter table Parent
+add constraint [fk_parpro]
+foreign key (ProfId) references  Profile (ProfileId)
+
+
+alter table Subject
+add constraint [fk_subpar]
+foreign key (ParId) references  Parent (ParentId)
+
+
+alter table Schedule
+add constraint [fk_schpar]
+foreign key (ParId) references  Parent (ParentId)
+
+
+alter table Notification
+add constraint [fk_notpar]
+foreign key (ParId) references  Parent (ParentId)
+
+
+alter table Offer
+add constraint [fk_offpar]
+foreign key (ParId) references  Parent (ParentId)
+
+
+alter table Parent
+add constraint [fk_paradd]
+foreign key (AddrId) references  Address (AddressId)
+
+
+alter table Rate
+add constraint [fk_ratpar]
+foreign key (ParId) references  Parent (ParentId)
+
+
+-- Foreign keys related to Student
+
+alter table Student
+add constraint [fk_stupro]
+foreign key (ProfId) references  Profile (ProfileId)
+
+
+alter table Notification
+add constraint [fk_notstu]
+foreign key (StuId) references  Student (StudentId)
+
+
+alter table Performance
+add constraint [fk_perstu]
+foreign key (StuId) references  Student (StudentId)
+
+
+alter table Student
+add constraint [fk_stuadd]
+foreign key (AddrId) references  Address (AddressId)
+
+
+-- Foreign keys related to Tutor
+
+alter table Schedule
+add constraint [fk_schtut]
+foreign key (TutId) references  Tutor (TutorId)
+
+
+alter table Subject
+add constraint [fk_subtut]
+foreign key (TutId) references  Tutor (TutorId)
+
+
+alter table Tutor
+add constraint [fk_tutpro]
+foreign key (ProfId) references  Profile (ProfileId)
+
+
+alter table Notification
+add constraint [fk_nottut]
+foreign key (TutId) references  Tutor (TutorId)
+
+
+alter table Offer
+add constraint [fk_offtut]
+foreign key (TutId) references  Tutor (TutorId)
+
+
+alter table Performance
+add constraint [fk_pertut]
+foreign key (TutId) references  Tutor (TutorId)
+
+
+alter table Tutor
+add constraint [fk_tutadd]
+foreign key (AddrId) references  Address (AddressId)
+
+
+alter table Rate
+add constraint [fk_rattut]
+foreign key (TutId) references  Tutor (TutorId)
